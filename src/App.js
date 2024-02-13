@@ -1,23 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
 
 function App() {
+  const [pokemonData, setPokemonData] = useState([]);
+
+  async function getData() {
+    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=2");
+    const data = await response.json();
+    return data
+    console.log(data);
+  }
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getData();
+      console.log(data);
+      setPokemonData(data.results);
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    console.log(pokemonData);
+  }, [pokemonData]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {pokemonData.map((pokemon) => (
+        <p>{pokemon.name}</p>
+      ))}
     </div>
   );
 }
